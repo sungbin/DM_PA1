@@ -18,16 +18,18 @@ void init_board(); // [1-9, 0, -1] = [num, ?, *]
 int
 main ()
 {
+	FILE * fp = fopen("formula", "w") ;
+
 	init_board();
 	int i, j, r,s,n;
  
 	for (i = 1 ; i <= N ; i++)
 		for (j = 1 ; j <= N ; j++)
-			printf("(declare-const p%d%d Int)\n", i, j) ;
+			fprintf(fp,"(declare-const p%d%d Int)\n", i, j) ;
 
 	for(i = 0; i<N; i++) for(j = 0; j<N; j++) {
 		if(board[i][j] > 0)
-			printf("(assert (= p%d%d %d))",i+1,j+1,board[i][j]);
+			fprintf(fp,"(assert (= p%d%d %d))",i+1,j+1,board[i][j]);
 		else if(board[i][j] == 0) {
 			Point point = {i,j};
 			ques_point[ques_cnt] = point;
@@ -43,62 +45,64 @@ main ()
 
 
 	// Q1
-	printf("; Q1\n") ;
-	printf("(assert (and ") ;
+	fprintf(fp,"; Q1\n") ;
+	fprintf(fp,"(assert (and ") ;
 	for (i = 1 ; i <= N ; i++) {
-		printf("(and ") ;
+		fprintf(fp,"(and ") ;
 		for (n = 1 ; n <= N ; n++) {
-			printf("(or ") ;
+			fprintf(fp,"(or ") ;
 			for(j = 1; j <=N; j++) {
-				printf("(= p%d%d %d) ", i, j,n) ;
+				fprintf(fp,"(= p%d%d %d) ", i, j,n) ;
 			}
-			printf(")") ;
+			fprintf(fp,")") ;
 		}
-		printf(")") ;
+		fprintf(fp,")") ;
 	}
-	printf("))\n") ;
+	fprintf(fp,"))\n") ;
 	// Q2
-	printf("; Q2\n") ;
-	printf("(assert (and ") ;
+	fprintf(fp,"; Q2\n") ;
+	fprintf(fp,"(assert (and ") ;
 	for (j = 1 ; j <= N ; j++) {
-		printf("(and ") ;
+		fprintf(fp,"(and ") ;
 		for (n = 1 ; n <= N ; n++) {
-			printf("(or ") ;
+			fprintf(fp,"(or ") ;
 			for(i = 1; i <=N; i++) {
-				printf("(= p%d%d %d) ", i, j,n) ;
+				fprintf(fp,"(= p%d%d %d) ", i, j,n) ;
 			}
-			printf(")") ;
+			fprintf(fp,")") ;
 		}
-		printf(")") ;
+		fprintf(fp,")") ;
 	}
-	printf("))\n") ;
+	fprintf(fp,"))\n") ;
 
 	
 	// Q3
-	printf("; Q3\n") ;
-	printf("(assert (and ") ;
+	fprintf(fp,"; Q3\n") ;
+	fprintf(fp,"(assert (and ") ;
 	for (r = 0 ; r <= 2 ; r++) {
-		printf("(and ") ;
+		fprintf(fp,"(and ") ;
 		for (s = 0 ; s <= 2 ; s++) {
-			printf("(and ") ;
+			fprintf(fp,"(and ") ;
 			for(n = 1; n <=N; n++) {
-				printf("(or ") ;
+				fprintf(fp,"(or ") ;
 				for (i = 1 ; i <= 3 ; i++) {
-					printf("(or ") ;
+					fprintf(fp,"(or ") ;
 					for(j = 1; j <= 3; j++) {
-						printf("(= p%d%d %d) ", 3*r+i, 3*s+j,n) ;
+						fprintf(fp,"(= p%d%d %d) ", 3*r+i, 3*s+j,n) ;
 					}
-					printf(")") ;
+					fprintf(fp,")") ;
 				}
-				printf(")") ;
+				fprintf(fp,")") ;
 			}
-			printf(")") ;
+			fprintf(fp,")") ;
 		}
-		printf(")") ;
+		fprintf(fp,")") ;
 	}
-	printf("))\n") ;
+	fprintf(fp,"))\n") ;
+	fprintf(fp,"(check-sat)\n(get-model)\n") ;
 
-	printf("(check-sat)\n(get-model)\n") ;
+	fclose(fp);
+
 }
 void init_board() {// [1-9, 0, -1] = [num, ?, *]
 	FILE* f;
