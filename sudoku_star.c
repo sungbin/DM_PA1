@@ -6,8 +6,6 @@ typedef struct _Point {
 	int col;
 	int row;
 } Point;
-Point ques_point[N*N];
-int ques_cnt = 0;
 Point star_point[N];
 int star_cnt = 0;
 
@@ -30,11 +28,6 @@ main ()
 	for(i = 0; i<N; i++) for(j = 0; j<N; j++) {
 		if(board[i][j] > 0)
 			fprintf(fp,"(assert (= p%d%d %d))",i+1,j+1,board[i][j]);
-		else if(board[i][j] == 0) {
-			Point point = {i,j};
-			ques_point[ques_cnt] = point;
-			ques_cnt++;
-		}
 		else if(board[i][j] == -1) {
 			Point point = {i,j};
 			star_point[star_cnt] = point;
@@ -99,10 +92,36 @@ main ()
 		fprintf(fp,")") ;
 	}
 	fprintf(fp,"))\n") ;
+
+	// Q4
+	fprintf(fp,"; Q4") ;
+	fprintf(fp,"(assert (and ");
+	for(i = 1; i < star_cnt; i++) {
+		Point p1 = star_point[i] ;
+		for(j = 0; j < i; j++) {
+			Point p2 = star_point[j];
+			
+		}
+
+	}
+	fprintf(fp,"))\n") ;
+
+
 	fprintf(fp,"(check-sat)\n(get-model)\n") ;
 
 	fclose(fp);
 
+	FILE * fin = popen("z3 formula", "r") ; //FIXME
+	char buf[128] ;
+	fscanf(fin, "%s %s", buf, buf) ;
+	while (!feof(fin)) {
+		fscanf(fin, "%s", buf) ; printf("%s ", buf) ;
+		fscanf(fin, "%s", buf) ; printf("%s ", buf) ;
+		fscanf(fin, "%s", buf) ; printf("%s ", buf) ;
+		fscanf(fin, "%s", buf) ; printf("%s ", buf) ;
+		fscanf(fin, "%s", buf) ; printf("%s\n", buf) ;
+	}
+	pclose(fin) ;
 }
 void init_board() {// [1-9, 0, -1] = [num, ?, *]
 	FILE* f;
