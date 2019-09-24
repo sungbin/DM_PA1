@@ -100,9 +100,8 @@ main ()
 		Point p1 = star_point[i] ;
 		for(j = 0; j < i; j++) {
 			Point p2 = star_point[j];
-			
+			fprintf(fp,"(not (= p%d%d  p%d%d))",p1.col,p1.row,p2.col,p2.row);
 		}
-
 	}
 	fprintf(fp,"))\n") ;
 
