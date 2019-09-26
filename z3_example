@@ -67,9 +67,6 @@
 
 
 ; my logic
-;(assert (forall ((p Point)) (= (board-at p) (+ (* (point-y p) 10)) (point-x p)) ))
-
-;(assert (forall ((p Point)) (= (board-at p) (+ (point-y p)) (point-x p)) ))
 (assert (forall ((p Point) (y Int) (x Int)) 
   (=> (and (= y (point-y p)) (= x (point-x p)))
   (= (board-at p) (+ x (* y 10)) )  
