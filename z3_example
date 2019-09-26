@@ -1,0 +1,90 @@
+(declare-sort Point)
+
+(declare-fun add-point (Int Int) Point)
+(declare-fun point-y (Point) Int)
+(declare-fun point-x (Point) Int)
+
+; *
+; y,x Point -> Value (1-9)
+(declare-fun board-at (Point) Int)
+
+
+; point x,y
+(assert (forall ((p Point)) (= (add-point (point-y p) (point-x p)) p)  ))
+
+;(assert (forall ((p Point) (y Int) (x Int)) (=> (and (= (point-y p) y) (= (point-x p) x)) (= (point-y (add-point y x)) y)) ))
+; (assert (forall ((p Point) (y Int) (x Int)) (=> (and (= (point-y p) y) (= (point-x p) x)) (= (point-x (add-point y x)) x)) ))
+
+
+
+(declare-const p11 Point)
+(assert (= (point-y p11) 1))
+(assert (= (point-x p11) 1))
+(declare-const p12 Point)
+(assert (= (point-y p12) 1))
+(assert (= (point-x p12) 2))
+(declare-const p13 Point)
+(assert (= (point-y p13) 1))
+(assert (= (point-x p13) 3))
+(declare-const p14 Point)
+(assert (= (point-y p14) 1))
+(assert (= (point-x p14) 4))
+(declare-const p15 Point)
+(assert (= (point-y p15) 1))
+(assert (= (point-x p15) 5))
+(declare-const p16 Point)
+(assert (= (point-y p16) 1))
+(assert (= (point-x p16) 6))
+(declare-const p17 Point)
+(assert (= (point-y p17) 1))
+(assert (= (point-x p17) 7))
+(declare-const p18 Point)
+(assert (= (point-y p18) 1))
+(assert (= (point-x p18) 8))
+(declare-const p19 Point)
+(assert (= (point-y p19) 1))
+(assert (= (point-x p19) 9))
+
+(assert (= (add-point 1 1) p11))
+(assert (= (add-point 1 2) p12))
+(assert (= (add-point 1 3) p13))
+(assert (= (add-point 1 4) p14))
+(assert (= (add-point 1 5) p15))
+(assert (= (add-point 1 6) p16))
+(assert (= (add-point 1 7) p17))
+(assert (= (add-point 1 8) p18))
+(assert (= (add-point 1 9) p19))
+
+(declare-const p11-val Int)
+(declare-const p12-val Int)
+(declare-const p13-val Int)
+(declare-const p14-val Int)
+(declare-const p15-val Int)
+(declare-const p16-val Int)
+(declare-const p17-val Int)
+(declare-const p18-val Int)
+(declare-const p19-val Int)
+
+
+; my logic
+;(assert (forall ((p Point)) (= (board-at p) (+ (* (point-y p) 10)) (point-x p)) ))
+
+;(assert (forall ((p Point)) (= (board-at p) (+ (point-y p)) (point-x p)) ))
+(assert (forall ((p Point) (y Int) (x Int)) 
+  (=> (and (= y (point-y p)) (= x (point-x p)))
+  (= (board-at p) (+ x (* y 10)) )  
+  )
+ ))
+
+(assert (= (board-at p11) p11-val))
+(assert (= (board-at p12) p12-val))
+(assert (= (board-at p13) p13-val))
+(assert (= (board-at p14) p14-val))
+(assert (= (board-at p15) p15-val))
+(assert (= (board-at p16) p16-val))
+(assert (= (board-at p17) p17-val))
+(assert (= (board-at p18) p18-val))
+(assert (= (board-at p19) p19-val))
+
+(check-sat)
+(get-model)
